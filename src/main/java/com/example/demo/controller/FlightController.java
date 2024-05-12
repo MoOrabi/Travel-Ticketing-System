@@ -32,4 +32,9 @@ public class FlightController {
     public ResponseEntity<?> deleteFlight(@RequestHeader HttpHeaders headers, @RequestParam Long flightId) {
         return flightService.deleteFlight(headers, flightId);
     }
+
+    @GetMapping("/")
+    public ResponseEntity<?> getFlight(@RequestHeader HttpHeaders headers, @RequestParam Long flightId) {
+        return flightService.getFlight(headers, flightId);
+    }
 }

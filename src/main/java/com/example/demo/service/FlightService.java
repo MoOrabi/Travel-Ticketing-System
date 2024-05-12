@@ -27,7 +27,7 @@ public class FlightService {
     public ResponseEntity<?> addOrUpdateFlight(HttpHeaders headers, FlightData flightData) {
         Long userId = appUserService.getUserIdFromHeaders(headers);
         if (userId != 0L){
-            Flight flight = flightToFlightData(flightData, userId);
+            Flight flight = flightDataToFlight(flightData, userId);
             if(flight != null && flight.getCreator().getId().equals(userId)) {
                 flightRepository.save(flight);
                 return new ResponseEntity<>(flightData, HttpStatus.OK);
@@ -55,7 +55,7 @@ public class FlightService {
         return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
     }
 
-    private Flight flightToFlightData(FlightData flightData, Long userId) {
+    private Flight flightDataToFlight(FlightData flightData, Long userId) {
         Optional<AppUser> creator = appUserRepository.findById(userId);
         return creator.map(appUser -> Flight.builder()
                 .flightNumber(flightData.getFlightNumber())
@@ -70,6 +70,20 @@ public class FlightService {
                 .build()).orElse(null);
     }
 
+    private FlightData flightToFlightData(Flight flight, Long userId) {
+        Optional<AppUser> creator = appUserRepository.findById(userId);
+        return creator.map(appUser -> FlightData.builder()
+                .flightNumber(flight.getFlightNumber())
+                .fromCity(flight.getFromCity())
+                .toCity(flight.getToCity())
+                .aircraftId(flight.getAircraftId())
+                .airportCode(flight.getAirportCode())
+                .ticketPrice(flight.getTicketPrice())
+                .arrivalTime(flight.getArrivalTime())
+                .departureTime(flight.getDepartureTime())
+                .build()).orElse(null);
+    }
+
     public ResponseEntity<?> getMyAllFlights(HttpHeaders headers) {
         Long userId = appUserService.getUserIdFromHeaders(headers);
         if (userId != 0L){
@@ -77,6 +91,24 @@ public class FlightService {
             return new ResponseEntity<>(flights, HttpStatus.OK);
         }
 
+        return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+    }
+
+    public ResponseEntity<?> getFlight(HttpHeaders headers, Long flightId) {
+        Long userId = appUserService.getUserIdFromHeaders(headers);
+        if (userId != 0L){
+            Optional<Flight> optionalFlight = flightRepository.findById(flightId);
+            if(optionalFlight.isPresent()) {
+                Flight flight = optionalFlight.get();
+                if(flight.getCreator().getId().equals(userId)){
+                    return new ResponseEntity<>(
+                            flightToFlightData(flight, userId),
+                            HttpStatus.OK);
+                }
+            }else {
+                return new ResponseEntity<>("No such flight number exists", HttpStatus.BAD_REQUEST);
+            }
+        }
         return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
     }
 }

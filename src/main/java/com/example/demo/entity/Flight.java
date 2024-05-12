@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 
@@ -19,9 +20,9 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long flightNumber;
 
-    private LocalTime arrivalTime;
+    private LocalDateTime arrivalTime;
 
-    private LocalTime departureTime;
+    private LocalDateTime departureTime;
 
     private String fromCity;
 
