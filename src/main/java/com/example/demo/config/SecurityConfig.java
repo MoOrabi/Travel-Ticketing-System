@@ -34,8 +34,6 @@ public class SecurityConfig {
                     authorizationManagerRequestMatcherRegistry
                             .requestMatchers("/login", "/swagger-ui/index.html")
                             .permitAll()
-                            .requestMatchers("/public/**")
-                            .permitAll()
                             .anyRequest()
                             .authenticated())
                 .httpBasic(Customizer.withDefaults())

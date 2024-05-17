@@ -64,6 +64,7 @@ public class FlightService {
                 .aircraftId(flightData.getAircraftId())
                 .airportCode(flightData.getAirportCode())
                 .ticketPrice(flightData.getTicketPrice())
+                .ticketPriceCurrency(flightData.getTicketPriceCurrency())
                 .arrivalTime(flightData.getArrivalTime())
                 .departureTime(flightData.getDepartureTime())
                 .creator(appUser)
@@ -81,6 +82,7 @@ public class FlightService {
                 .ticketPrice(flight.getTicketPrice())
                 .arrivalTime(flight.getArrivalTime())
                 .departureTime(flight.getDepartureTime())
+                .ticketPriceCurrency(flight.getTicketPriceCurrency())
                 .build()).orElse(null);
     }
 
