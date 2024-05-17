@@ -1,7 +1,13 @@
 package com.example.demo;
 
+import com.example.demo.constants.AppUserRole;
+import com.example.demo.entity.AppUser;
+import com.example.demo.repository.AppUserRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -10,4 +16,14 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
+	@Profile({"prod"})
+	@Bean
+	CommandLineRunner run(AppUserRepository appUserRepository) {
+		return args -> {
+
+			AppUser appUser = new AppUser("Mo", "Mo", "h1@g.c", "12345678", AppUserRole.ROLE_ADMIN, false, true);
+
+			appUserRepository.save(appUser);
+		};
+	}
 }
